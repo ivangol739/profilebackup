@@ -1,5 +1,7 @@
 import requests
 import os
+from pprint import pprint
+import time
 
 
 class UserVk:
@@ -28,7 +30,22 @@ class UserVk:
 		params = self.get_common_params()
 		params.update({"user_id": self.user_id,
 									 "album_id": "profile",
-									 "extented": "1",
+									 "extended": "1",
 									 })
-		response = requests.get(self._build_url("photos.get"), params=params)
-		return response.json().
+		response = requests.get(self._build_url("photos.get"), params=params).json()["response"]["items"]
+
+		photos_list = []
+		like_count = set()
+		for photo in response[:5]:
+			photos_dict = {}
+			if photo["likes"]["count"] not in like_count:
+				photos_dict["file_name"] = str(photo["likes"]["count"]) + ".jpg"
+				like_count.add(photo["likes"]["count"])
+			else:
+				date = time.strftime('%d.%m.%Y', time.localtime(photo["date"]))
+				photos_dict["file_name"] = str(photo["likes"]["count"]) + "_" + str(date) + ".jpg"
+			photos_dict["size"] = photo["sizes"][-1]["type"]
+			img = requests.get(photo["sizes"][-1]['url']).content
+			pprint(photos_dict)
+		pprint(response)
+		return
