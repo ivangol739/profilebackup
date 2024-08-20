@@ -2,6 +2,7 @@ import json
 import requests
 import os
 import time
+from tqdm import tqdm
 
 
 class UserVk:
@@ -41,7 +42,7 @@ class UserVk:
 
 		photos_list = []
 		like_count = set()
-		for photo in response[:5]:
+		for photo in tqdm(response[:5]):
 			photos_dict = {}
 			if photo["likes"]["count"] not in like_count:
 				photos_dict["file_name"] = str(photo["likes"]["count"]) + ".jpg"
@@ -56,3 +57,4 @@ class UserVk:
 				file.write(img)
 		with open("data.json", "w", encoding="utf-8") as file:
 			json.dump(photos_list, file)
+		return f"Сохранение из ВК завершено"

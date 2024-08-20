@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 from VkProfille import UserVk
-from YaUploader import YaUploader
+# from YaUploader import YaUploader
 from pprint import pprint
 
 if __name__ == "__main__":
